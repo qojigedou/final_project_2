@@ -28,12 +28,18 @@ const postRegister = asyncHandler(async (req, res) => {
 
   try {
     const dbProfile = await User.create(userProfile);
+    const token = genToken(dbProfile.id);
+    res.cookie("token", token, {
+      maxAge: 44200000,
+      httpOnly: true,
+    });
+
     res.status(201);
     res.json({
       id: dbProfile.id,
       userName,
       email,
-      token: genToken(dbProfile.id),
+      token,
     });
   } catch (error) {
     if (

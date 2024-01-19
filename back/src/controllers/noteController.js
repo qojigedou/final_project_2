@@ -12,18 +12,29 @@ const getNotes = asyncHandler(async (req, res) => {
     throw new Error("No userId!");
   }
   const notes = await Note.find({ author: id });
-  console.log(notes);
-  res.status(200).json({ message: "Get notes" });
+  res.status(200).json(notes);
+});
+
+const getNoteDetails = asyncHandler(async (req, res) => {
+  const noteId = req.params.id;
+  if (!noteId) {
+    res.status(400);
+    throw new Error("No userId!");
+  }
+
+  const note = await Note.findById(noteId);
+
+  res.json(note).status(200);
 });
 
 // @desc Set note
 // @route POST /api/notes
 // @accesss Private
 const setNote = asyncHandler(async (req, res) => {
-  const { videoLink } = req.body;
+  const { videoLink, initialNote } = req.body;
   const { _id: id } = req.user;
 
-  if (!req.body.videoLink) {
+  if (!videoLink) {
     res.status(400);
     throw new Error("Please add a link to a video");
   }
@@ -40,9 +51,10 @@ const setNote = asyncHandler(async (req, res) => {
       videoLink,
       videoTitle: videoDetails.title,
       videoThumbnail: videoDetails.thumbnail_url,
+      noteContent: [{ content: initialNote }],
       author: id,
     });
-    res.status(200).json(dbNote);
+    res.status(201).json(dbNote);
   } catch (error) {
     if (
       error instanceof mongoose.Error.CastError ||
@@ -92,7 +104,7 @@ const updateNote = asyncHandler(async (req, res) => {
   const { mainId, childId } = req.params;
   const contentReq = req.body.content;
   const timestampReq = req.body.timestamp;
-  console.log({ mainId, childId });
+
   const updatedNote = await Note.findOneAndUpdate(
     { _id: mainId, noteContent: { $elemMatch: { _id: childId } } },
     {
@@ -112,7 +124,6 @@ const deleteNote = asyncHandler(async (req, res) => {
   const { mainId, childId } = req.params;
   const contentReq = req.body.content;
   const timestampReq = req.body.timestamp;
-  console.log({ mainId, childId });
   const updatedNote = await Note.findOneAndUpdate(
     { _id: mainId, noteContent: { $elemMatch: { _id: childId } } },
     {
@@ -126,11 +137,13 @@ const deleteNote = asyncHandler(async (req, res) => {
     },
     { new: true }
   );
+  res.json({ message: "ok" }).status(200);
 });
 
 const deleteFullNote = asyncHandler(async (req, res) => {
   const { mainId } = req.params;
   await Note.findByIdAndDelete(mainId);
+  res.json({ message: "ok" }).status(200);
 });
 
 export {
@@ -140,4 +153,5 @@ export {
   deleteNote,
   setNewNote,
   deleteFullNote,
+  getNoteDetails,
 };

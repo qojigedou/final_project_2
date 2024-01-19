@@ -1,27 +1,28 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [isError, setIsError] = useState("");
 
   const navigate = useNavigate();
-  const handlerLogin = async (e) => {
+  const handlerRegister = async (e) => {
     e.preventDefault();
     const response = await fetch(
-      "http://localhost:8080/api/notetube/user/login",
+      "http://localhost:8080/api/notetube/user/register",
       {
         method: "POST",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userName: username, password }),
+        body: JSON.stringify({ userName: username, password, email }),
       }
     );
-    if (response.status == 200) {
+    if (response.status == 201) {
       const responseData = await response.json();
       const user = responseData;
       localStorage.setItem("user", JSON.stringify(user));
@@ -30,13 +31,17 @@ const Login = () => {
       setIsError(true);
     }
   };
-
   useEffect(() => {
     if (localStorage.getItem("user")) {
       navigate("/");
     }
   });
-
+  const checkEmail = () => {
+    return (
+      email.length > 0 &&
+      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email)
+    );
+  };
   return (
     <div className="w-full h-[100vh]">
       <form className="flex flex-col w-full sm:w-3/5 md:w-2/5 bg-gray-300 gap-3 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] p-4 rounded-lg">
@@ -54,6 +59,22 @@ const Login = () => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
+        {isError && username.length < 3 && (
+          <p className="text-red-400">given username is too short</p>
+        )}
+        <label htmlFor="email">Email</label>
+        <input
+          className="p-2"
+          type="email"
+          name="email"
+          id="email"
+          placeholder="your not very secret email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        {isError && !checkEmail() && (
+          <p className="text-red-400">wrong email</p>
+        )}
         <label htmlFor="password">Password</label>
         <input
           className="p-2"
@@ -64,22 +85,18 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {isError && <p className="text-red-400">Wrong credentials</p>}
-        <p className="text-center">
-          Dont have an account?{" "}
-          <Link className="underline" to="/register">
-            Register now
-          </Link>
-        </p>
+        {isError && password.length < 7 && (
+          <p className="text-red-400">given password is too short</p>
+        )}
         <button
           type="submit"
           className="p-4 bg-gray-100"
-          onClick={handlerLogin}
+          onClick={handlerRegister}
         >
-          Sign In
+          Register
         </button>
       </form>
     </div>
   );
 };
-export default Login;
+export default Register;

@@ -7,11 +7,13 @@ import {
   deleteNote,
   setNewNote,
   deleteFullNote,
+  getNoteDetails,
 } from "../controllers/noteController.js";
 import noteAuth from "../middleware/notAuthUserMiddleware.js";
 
 router.post("/", noteAuth, setNote);
 router.get("/mynotes", noteAuth, getNotes);
+router.get("/details/:id", getNoteDetails);
 router.post("/mynotes/newnote/:id", noteAuth, setNewNote);
 router.put("/mynotes/newnote/:mainId/:childId", noteAuth, updateNote);
 
