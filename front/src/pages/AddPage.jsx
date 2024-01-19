@@ -6,6 +6,7 @@ const AddPage = () => {
   const [videoLink, setVideolink] = useState("");
   const [notes, setNotes] = useState("");
   const navigate = useNavigate();
+  const [isError, setIsError] = useState("");
 
   const handleAddNote = async (e) => {
     e.preventDefault();
@@ -19,6 +20,8 @@ const AddPage = () => {
     });
     if (response.status == 201) {
       navigate("/");
+    } else {
+      setIsError(true);
     }
   };
 
@@ -33,6 +36,9 @@ const AddPage = () => {
           value={videoLink}
           onChange={(e) => setVideolink(e.target.value)}
         />
+        {isError && videoLink.length < 5 && (
+          <p className="text-red-400">invalid videolink</p>
+        )}
         <label htmlFor="notes">Notes text</label>
         <textarea
           name="notes"
@@ -42,6 +48,9 @@ const AddPage = () => {
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
         ></textarea>
+        {isError && notes.length < 1 && (
+          <p className="text-red-400">invalid notes length</p>
+        )}
         <button
           className="hover:bg-black hover:text-white border-2 border-solid border-black p-2 w-1/2 mx-auto mt-6"
           onClick={handleAddNote}
