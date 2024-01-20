@@ -1,57 +1,97 @@
 # YouTube notes - NoteTube
 
+The web page where you can make simple notes for you favourite YouTube videos.
+
 ## Table of Contents
 
-* [General info](#general-info)
-* [UML Diagram](#uml-diagram)
-* [Technologies](#technologies)
-* [Features](#features)
-* [Setup](#setup)
+- [General info](#general-info)
+- [Technologies](#technologies)
+- [Features](#features)
+- [Setup](#setup)
 
 ## General info
 
-The project was created to practice the usage of HTML, CSS, and JavaScript for a web technologies course. It is a static website with animations and an included contact form.
+The project was made as a second final project of Web Development Course.
 
 ## Technologies
 
 Project is created with:
-* MongoDB
-* Mongoose
-* JavaScript
-* FormSubmit (backend API responsible for the work of contact form)
-* GoogleMaps 
+
+## Backend:
+
+- MongoDB
+- Mongoose
+- Express
+- jsonwebtoken
+- bcryptjs
+- cookie-parser
+- express-async-handler
+- dotenv
+
+## Frontend:
+
+- React
+- Vite
+- TailwindCSS
+- react-dom
+- react-icons
+- react-router-dom
 
 ## Features
 
-* Animations implemented using IntersectionObserver.
-* JavaScript developed following the Object-Oriented Programming (OOP) paradigm.
-* Contact form integrated with FormSubmit.
-* Image slideshow feature.
-* Image carousel functionality.
-* Animated arrow-down image facilitating scrolling to the next section of the page.
+- simple interface of a webpage, with intuitive navigation and logic interface actions
+- adding/updating/removing notes from user interface
+- adding/updating/removing a single note in notes for a video from user interface
+- ability to watch the youtube video while taking notes
+- login/register endpoints with encrypted passwords, token as authentication method
+- cookie parser extracts the cookie data from the HTTP request and converts it into a usable format that can be accessed by the server-side code
 
 ## Setup
 
-To run this project, clone the repository and utilize the Live Server extension in VSCode or VSCodium, or employ other tools to run the project on a server.
+To setup the project we should first create the `.env` files in backend directory and fill it in with
 
-Alternatively, you can use `serve` to run the project. Follow these steps:
+- backend
 
-1. Install the necessary dependencies:
+```
+PORT=8080
+MONGO_URI=
+JWT_SECRET=
+NODE_ENV =
+
+```
+
+## Setup Backend:
+
+1. Install npm:
+
 ```
 $ npm install
-$ sudo npm install -g serve
+
 ```
 
 2. Run the project:
 
 ```
-$ serve .
+$ npm run dev
 ```
 
-In a new console tab, open the project in Firefox by executing the following command:
+## Setup Frontend:
+
+1. Install npm:
 
 ```
-$ firefox http://localhost:3000
+$ npm install
+
 ```
 
-To test the contact form, modify the destination address in the `index.html` file to your email.
+2. Run the project:
+
+```
+$ npm run dev
+```
+
+After providing all the commands, you will have a link in a terminal where you were setting up the fronend to the localhost. You can ctrl+click on it or write down this command to the terminal:
+
+```
+firefox http://localhost:5173/
+```
